@@ -13,7 +13,7 @@ export function CancelButton({ uid, token }: { uid: string; token: string }) {
     setErr(null);
     try {
       const res = await fetch(`/api/bookings/${uid}?token=${token}`, { method: "DELETE" });
-      if (!res.ok) throw new Error((await res.json()).error ?? "Cancel failed");
+      if (!res.ok) throw new Error(((await res.json()) as { error?: string }).error ?? "Cancel failed");
       window.location.reload();
     } catch (e) {
       setErr((e as Error).message);

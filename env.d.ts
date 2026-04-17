@@ -42,18 +42,20 @@ interface CloudflareEmailServiceBinding {
   send(payload: CloudflareEmailSendPayload): Promise<CloudflareEmailSendResult>;
 }
 
-export interface CloudflareEnv {
-  DB: D1Database;
-  SEND_EMAIL: CloudflareEmailServiceBinding;
-  GOOGLE_CLIENT_ID: string;
-  GOOGLE_CLIENT_SECRET: string;
-  GOOGLE_REDIRECT_URI: string;
-  SESSION_SECRET: string;
-  APP_URL: string;
-}
-
 declare global {
+  interface CloudflareEnv {
+    DB: D1Database;
+    SEND_EMAIL: CloudflareEmailServiceBinding;
+    GOOGLE_CLIENT_ID: string;
+    GOOGLE_CLIENT_SECRET: string;
+    GOOGLE_REDIRECT_URI: string;
+    SESSION_SECRET: string;
+    APP_URL: string;
+  }
+
   namespace NodeJS {
     interface ProcessEnv extends CloudflareEnv {}
   }
 }
+
+export {};

@@ -44,7 +44,7 @@ export function BookingForm({
             body: JSON.stringify({ newStart: startIso }),
           }
         );
-        if (!res.ok) throw new Error((await res.json()).error ?? "Reschedule failed");
+        if (!res.ok) throw new Error(((await res.json()) as { error?: string }).error ?? "Reschedule failed");
         const data = (await res.json()) as { uid: string };
         router.push(`/booking/${data.uid}`);
         return;
@@ -61,7 +61,7 @@ export function BookingForm({
           notes,
         }),
       });
-      if (!res.ok) throw new Error((await res.json()).error ?? "Booking failed");
+      if (!res.ok) throw new Error(((await res.json()) as { error?: string }).error ?? "Booking failed");
       const data = (await res.json()) as { uid: string };
       router.push(`/booking/${data.uid}`);
     } catch (err) {
