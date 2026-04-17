@@ -1,0 +1,5 @@
+GOOGLE_CLIENT_ID=your-google-oauth-client-id
+GOOGLE_CLIENT_SECRET=your-google-oauth-client-secret
+GOOGLE_REDIRECT_URI=http://localhost:8787/api/auth/google/callback
+SESSION_SECRET=replace-with-32+-random-bytes-base64
+APP_URL=http://localhost:8787
