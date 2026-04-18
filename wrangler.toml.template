@@ -1,0 +1,35 @@
+name = "booking-app"
+compatibility_date = "2026-04-17"
+compatibility_flags = ["nodejs_compat"]
+main = ".open-next/worker.js"
+
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "booking-app"
+database_id = "${D1_DATABASE_ID}"
+migrations_dir = "src/db/migrations"
+
+# Cloudflare Email Service (public beta).
+# https://developers.cloudflare.com/email-service/get-started/send-emails/
+# Prerequisites: your sending domain must be on Cloudflare DNS and onboarded via
+# the dashboard (Email Sending → Onboard Domain). That wires up MX (cf-bounce),
+# SPF, DKIM, and DMARC records automatically.
+#
+# `remote = true` lets `wrangler dev` send real email while running locally.
+# While testing, uncomment `allowed_destination_addresses` to restrict who
+# your Worker can send to — the binding rejects sends to any other recipient.
+[[send_email]]
+name = "SEND_EMAIL"
+remote = true
+# allowed_destination_addresses = ["you@example.com", "teammate@example.com"]
+
+# Secrets (set via `wrangler secret put <NAME>`):
+#   GOOGLE_CLIENT_ID
+#   GOOGLE_CLIENT_SECRET
+#   GOOGLE_REDIRECT_URI
+#   SESSION_SECRET
+#   APP_URL
