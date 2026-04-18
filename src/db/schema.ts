@@ -14,6 +14,7 @@ export const users = sqliteTable(
     name: text("name").notNull(),
     timezone: text("timezone").notNull().default("UTC"),
     defaultScheduleId: text("default_schedule_id"),
+    isAdmin: integer("is_admin", { mode: "boolean" }).notNull().default(false),
     createdAt: createdAt(),
   },
   (t) => ({
@@ -205,6 +206,22 @@ export const bookingReferences = sqliteTable(
   })
 );
 
+export const appSettings = sqliteTable("app_settings", {
+  id: text("id").primaryKey(),
+  defaultEventTypeId: text("default_event_type_id").references(() => eventTypes.id, {
+    onDelete: "set null",
+  }),
+  updatedAt: integer("updated_at", { mode: "timestamp" })
+    .notNull()
+    .default(sql`(strftime('%s','now'))`),
+  updatedByUserId: text("updated_by_user_id").references(() => users.id, {
+    onDelete: "set null",
+  }),
+});
+
+export const APP_SETTINGS_ID = "singleton";
+
+export type AppSettings = typeof appSettings.$inferSelect;
 export type User = typeof users.$inferSelect;
 export type Account = typeof accounts.$inferSelect;
 export type Team = typeof teams.$inferSelect;

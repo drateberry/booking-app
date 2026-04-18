@@ -1,6 +1,8 @@
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { getEnv } from "@/db/client";
+import { eq } from "drizzle-orm";
+import { getDb, getEnv } from "@/db/client";
+import { users } from "@/db/schema";
 
 const COOKIE_NAME = "session";
 const MAX_AGE_SECONDS = 60 * 60 * 24 * 30;
@@ -40,4 +42,12 @@ export async function getSessionUserId(): Promise<string | null> {
 
 export async function destroySession(): Promise<void> {
   (await cookies()).delete(COOKIE_NAME);
+}
+
+export async function getSessionUser() {
+  const userId = await getSessionUserId();
+  if (!userId) return null;
+  const db = getDb();
+  const user = await db.query.users.findFirst({ where: eq(users.id, userId) });
+  return user ?? null;
 }

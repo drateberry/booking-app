@@ -53,9 +53,19 @@ export default async function DashboardHome() {
             </Link>
           </p>
         </div>
-        <form action="/api/auth/logout" method="post">
-          <button className="rounded-md border px-3 py-1 text-sm">Sign out</button>
-        </form>
+        <div className="flex items-center gap-2">
+          {user.isAdmin && (
+            <Link
+              href="/dashboard/settings"
+              className="rounded-md border px-3 py-1 text-sm"
+            >
+              Settings
+            </Link>
+          )}
+          <form action="/api/auth/logout" method="post">
+            <button className="rounded-md border px-3 py-1 text-sm">Sign out</button>
+          </form>
+        </div>
       </header>
 
       <section>

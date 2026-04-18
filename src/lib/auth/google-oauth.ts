@@ -1,5 +1,5 @@
 import { nanoid } from "nanoid";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { getDb, getEnv } from "@/db/client";
 import { accounts, schedules, availability, users } from "@/db/schema";
 import { encrypt } from "@/lib/crypto/aes";
@@ -95,6 +95,10 @@ export async function handleGoogleCallback(code: string): Promise<{ userId: stri
     const clash = await db.query.users.findFirst({ where: eq(users.username, username) });
     if (clash) username = `${username}-${nanoid(4)}`;
     const scheduleId = nanoid(12);
+    const [{ count }] = await db
+      .select({ count: sql<number>`count(*)`.mapWith(Number) })
+      .from(users);
+    const isFirstUser = count === 0;
     await db.insert(users).values({
       id: userId,
       email: info.email,
@@ -102,6 +106,7 @@ export async function handleGoogleCallback(code: string): Promise<{ userId: stri
       name: info.name ?? info.email,
       timezone: "UTC",
       defaultScheduleId: scheduleId,
+      isAdmin: isFirstUser,
     });
     await db.insert(schedules).values({
       id: scheduleId,

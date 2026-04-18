@@ -1,6 +1,13 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getDefaultLandingPath } from "@/lib/settings";
 
-export default function HomePage() {
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const path = await getDefaultLandingPath();
+  if (path) redirect(path);
+
   return (
     <main className="mx-auto flex min-h-screen max-w-2xl flex-col items-center justify-center gap-6 p-8 text-center">
       <h1 className="text-4xl font-semibold">Booking</h1>
